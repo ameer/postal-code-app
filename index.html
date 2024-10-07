@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postal Code App</title>
+    <script src="https://pfau-software.de/json-viewer/dist/iife/index.js"></script>
+</head>
+
+<body>
+    <form id="postalCodeForm">
+        <input type="text" id="postalCode" placeholder="Enter postal code" required>
+        <button type="submit">Submit</button>
+    </form>
+    <andypf-json-viewer theme="monokai" id="result" data='{}' show-data-types="false"></andypf-json-viewer>
+    <script>
+        document.getElementById('postalCodeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const postalCode = document.getElementById('postalCode').value;
+            const response = await fetch('/api/postal-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postalCode })
+            });
+            const data = await response.text();
+            document.getElementById('result').setAttribute('data', data)
+        });
+    </script>
+</body>
+
+</html>
