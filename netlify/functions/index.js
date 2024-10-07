@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 const app = express();
+const serverless = require('serverless-http');
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 // Return index.html
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-})
+app.use(express.static(path.join(__dirname, 'public')));
 app.post('/api/postal-code', async (req, res) => {
     const { postalCode } = req.body;
     try {
@@ -22,6 +22,4 @@ app.post('/api/postal-code', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+module.exports.handler = serverless(app);
